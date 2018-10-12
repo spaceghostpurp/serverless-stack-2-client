@@ -21,39 +21,40 @@ export default class Settings extends Component {
   }
 
   handleFormSubmit = async (storage, { token, error }) => {
-    if (error) {
-      alert(error);
-      return;
-    }
-
-    this.setState({ isLoading: true });
-
-    try {
-      await this.billUser({
-        storage,
-        source: token.id
-      });
-
-      alert("Your card has been charged successfully!");
-      this.props.history.push("/");
-    } catch (e) {
-      alert(e);
-      this.setState({ isLoading: false });
-    }
+  if (error) {
+    alert(error);
+    return;
   }
 
-  render() {
-    return (
-      <div className="Settings">
-        <StripeProvider apiKey={config.STRIPE_KEY}>
-          <Elements>
-            <BillingForm
-              loading={this.state.isLoading}
-              onSubmit={this.handleFormSubmit}
-            />
-          </Elements>
-        </StripeProvider>
-      </div>
-    );
+  this.setState({ isLoading: true });
+
+  try {
+    await this.billUser({
+      storage,
+      source: token.id
+    });
+
+    alert("Your card has been charged successfully!");
+    this.props.history.push("/");
+  } catch (e) {
+    alert(e);
+    this.setState({ isLoading: false });
   }
+}
+
+render() {
+  return (
+    <div className="Settings">
+      <StripeProvider apiKey={config.STRIPE_KEY}>
+        <Elements>
+          <BillingForm
+            loading={this.state.isLoading}
+            onSubmit={this.handleFormSubmit}
+          />
+        </Elements>
+      </StripeProvider>
+    </div>
+  );
+}
+
 }
